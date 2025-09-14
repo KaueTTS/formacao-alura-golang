@@ -4,13 +4,16 @@ import (
 	healthRoute "go_gin_criando_api_rest_com_simplicidade/src/api/routes/health"
 	studentRoute "go_gin_criando_api_rest_com_simplicidade/src/api/routes/student"
 	postgresdb "go_gin_criando_api_rest_com_simplicidade/src/config/db"
+	"go_gin_criando_api_rest_com_simplicidade/src/config/env"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 func Init() *gin.Engine {
-	postgresdb.Init()
+	cfg := env.Load()
+	postgresdb.Connect(cfg)
+
 	r := gin.Default()
 
 	r.NoRoute(func(c *gin.Context) {

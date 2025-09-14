@@ -9,8 +9,8 @@ import (
 func StudentRoutes(r *gin.Engine) {
 	group := r.Group("/v1/students")
 	{
-		group.GET("/", controllers_v1.DisplayAllStudents)
+		group.GET("", controllers_v1.DisplayAllStudents)
 		group.GET("/:id", controllers_v1.DisplayStudentByID)
-		group.POST("/", controllers_v1.CreateStudent)
+		group.POST("", controllers_v1.CreateStudent)
 	}
 }
