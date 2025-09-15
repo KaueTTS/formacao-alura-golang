@@ -32,9 +32,9 @@ func Connect(cfg env.Config) *gorm.DB {
 	if err != nil {
 		log.Fatalf("sql DB error: %v", err)
 	}
-	sqlDB.SetMaxOpenConns(20)
-	sqlDB.SetMaxIdleConns(10)
-	sqlDB.SetConnMaxLifetime(30 * time.Minute)
+	sqlDB.SetMaxOpenConns(20)                  // máximo de 20 conexões abertas ao mesmo tempo
+	sqlDB.SetMaxIdleConns(10)                  // até 10 conexões podem ficar paradas
+	sqlDB.SetConnMaxLifetime(30 * time.Minute) // cada conexão pode durar até 30 min
 
 	if err := db.AutoMigrate(&models.Student{}); err != nil {
 		log.Fatalf("auto-migrate error: %v", err)
