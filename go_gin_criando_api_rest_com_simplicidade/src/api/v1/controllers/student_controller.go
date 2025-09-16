@@ -1,4 +1,4 @@
-package controllers_v1
+package controllers
 
 import (
 	postgresdb "go_gin_criando_api_rest_com_simplicidade/src/config/db"

@@ -1,7 +1,7 @@
 package route
 
 import (
-	controllers_v1 "go_gin_criando_api_rest_com_simplicidade/src/api/v1/controllers"
+	controllers "go_gin_criando_api_rest_com_simplicidade/src/api/v1/controllers"
 
 	"github.com/gin-gonic/gin"
 )
@@ -9,14 +9,14 @@ import (
 func StudentRoutes(r *gin.Engine) {
 	group := r.Group("/v1/students")
 	{
-		group.GET("", controllers_v1.DisplayAllStudents)
-		group.GET("/:id", controllers_v1.DisplayStudentByID)
-		group.GET("/cpf/:cpf", controllers_v1.DisplayStudentByCPF)
+		group.GET("", controllers.DisplayAllStudents)
+		group.GET("/:id", controllers.DisplayStudentByID)
+		group.GET("/cpf/:cpf", controllers.DisplayStudentByCPF)
 
-		group.POST("", controllers_v1.CreateStudent)
+		group.POST("", controllers.CreateStudent)
 
-		group.DELETE("/:id", controllers_v1.DeleteStudent)
+		group.DELETE("/:id", controllers.DeleteStudent)
 
-		group.PATCH("/:id", controllers_v1.UpdateStudent)
+		group.PATCH("/:id", controllers.UpdateStudent)
 	}
 }
