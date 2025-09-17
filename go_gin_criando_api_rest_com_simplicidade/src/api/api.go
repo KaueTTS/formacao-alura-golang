@@ -13,7 +13,6 @@ import (
 func Init() *gin.Engine {
 	cfg := env.Load()
 	postgresdb.Connect(cfg)
-
 	r := gin.Default()
 
 	r.NoRoute(func(c *gin.Context) {

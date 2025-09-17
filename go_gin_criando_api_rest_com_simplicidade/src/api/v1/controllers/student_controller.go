@@ -1,6 +1,7 @@
 package controllers_v1
 
 import (
+	api_common "go_gin_criando_api_rest_com_simplicidade/src/api/common"
 	postgresdb "go_gin_criando_api_rest_com_simplicidade/src/config/db"
 	"go_gin_criando_api_rest_com_simplicidade/src/models"
 	"net/http"
@@ -18,7 +19,7 @@ func DisplayStudentByID(c *gin.Context) {
 	id := c.Param("id")
 	var student models.Student
 	if err := postgresdb.DB.First(&student, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Student not found"})
+		c.JSON(http.StatusNotFound, api_common.NewErrorResponse("Student not found", err.Error(), http.StatusNotFound))
 		return
 	}
 	c.JSON(http.StatusOK, student)
@@ -28,7 +29,7 @@ func DisplayStudentByCPF(c *gin.Context) {
 	cpf := c.Param("cpf")
 	var student models.Student
 	if err := postgresdb.DB.Where("cpf = ?", cpf).First(&student).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Student not found"})
+		c.JSON(http.StatusNotFound, api_common.NewErrorResponse("Student not found", err.Error(), http.StatusNotFound))
 		return
 	}
 	c.JSON(http.StatusOK, student)
@@ -37,9 +38,15 @@ func DisplayStudentByCPF(c *gin.Context) {
 func CreateStudent(c *gin.Context) {
 	var newStudent models.Student
 	if err := c.ShouldBindJSON(&newStudent); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, api_common.NewErrorResponse("Invalid input", err.Error(), http.StatusBadRequest))
 		return
 	}
+
+	if err := models.ValidateStudentData(&newStudent); err != nil {
+		c.JSON(http.StatusBadRequest, api_common.NewErrorResponse("Validation failed", err.Error(), http.StatusBadRequest))
+		return
+	}
+
 	postgresdb.DB.Create(&newStudent)
 	c.JSON(http.StatusCreated, newStudent)
 }
@@ -48,7 +55,7 @@ func DeleteStudent(c *gin.Context) {
 	id := c.Param("id")
 	var student models.Student
 	if err := postgresdb.DB.First(&student, id).Error; err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Student not found"})
+		c.JSON(http.StatusNotFound, api_common.NewErrorResponse("Student not found", err.Error(), http.StatusNotFound))
 		return
 	}
 	postgresdb.DB.Delete(&student)
@@ -61,7 +68,12 @@ func UpdateStudent(c *gin.Context) {
 	postgresdb.DB.First(&student, id)
 
 	if err := c.ShouldBindJSON(&student); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, api_common.NewErrorResponse("Invalid input", err.Error(), http.StatusBadRequest))
+		return
+	}
+
+	if err := models.ValidateStudentData(&student); err != nil {
+		c.JSON(http.StatusBadRequest, api_common.NewErrorResponse("Validation failed", err.Error(), http.StatusBadRequest))
 		return
 	}
 
