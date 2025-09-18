@@ -22,8 +22,12 @@ func Init() *gin.Engine {
 		c.JSON(http.StatusMethodNotAllowed, gin.H{"error": "method_not_allowed"})
 	})
 
-	healthRoute.HealthRoute(r)
-	studentRoute.StudentRoutes(r)
+	InjectRoutes(r)
 
 	return r
+}
+
+func InjectRoutes(app *gin.Engine) {
+	healthRoute.HealthRoute(app)
+	studentRoute.StudentRoutes(app)
 }
