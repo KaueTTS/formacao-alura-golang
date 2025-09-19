@@ -7,6 +7,7 @@ import (
 	"go_api_rest/models"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/swaggo/swag/example/celler/httputil"
 )
 
 func Saudacoes(c *gin.Context) {
@@ -16,6 +17,18 @@ func Saudacoes(c *gin.Context) {
 	})
 }
 
+// TodosAlunos godoc
+//
+//	@Summary		Exibir todos os alunos
+//	@Description	Rota para exibir todos os alunos
+//	@Tags			alunos
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	models.Aluno
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/alunos	[get]
 func TodosAlunos(c *gin.Context) {
 	var alunos []models.Aluno
 	database.DB.Find(&alunos)
@@ -57,6 +70,19 @@ func DeletarAluno(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"data": "Aluno deletado com sucesso"})
 }
 
+// EditarAlunos godoc
+//
+//	@Summary		Edita um aluno
+//	@Description	Rota para editar um aluno
+//	@Tags			alunos
+//	@Accept			json
+//	@Produce		json
+//	@Param			alunos	body	models.Aluno	true	"Modelo do aluno"
+//	@Success		200	{object}	models.Aluno
+//	@Failure		400	{object}	httputil.HTTPError
+//	@Failure		404	{object}	httputil.HTTPError
+//	@Failure		500	{object}	httputil.HTTPError
+//	@Router			/alunos/{id}	[patch]
 func EditarAluno(c *gin.Context) {
 	var aluno models.Aluno
 	id := c.Params.ByName("id")
